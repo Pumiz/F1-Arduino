@@ -1,0 +1,13 @@
+#include <Servo.h>
+Servo direccionservo;
+void setup() {
+  direccionservo.attach(2);
+}
+void loop() {
+direccionservo.write(0);
+delay(3500);
+direccionservo.write(90);
+delay(3500);
+direccionservo.write(180);
+delay(3500);
+}

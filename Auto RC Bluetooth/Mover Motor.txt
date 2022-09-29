@@ -1,0 +1,84 @@
+//L293 Connection   
+  const int motorA1      = 3;  
+  const int motorA2      = 4; 
+  const int motorAspeed  = 5;
+  const int motorB1      = 7; 
+  const int motorB2      = 8; 
+  const int motorBspeed  = 6;
+  
+
+//Useful Variables
+  int state;
+  int vSpeed=255;     // Definir la velocidad de los motores, desde 0 hasta 255
+
+void setup() {
+    // Set pins as outputs:
+    pinMode(motorA1, OUTPUT);
+    pinMode(motorA2, OUTPUT);
+    pinMode(motorB1, OUTPUT);
+    pinMode(motorB2, OUTPUT);
+   
+    // Initialize serial communication at 9600 bits per second:
+    Serial.begin(9600);
+}
+ 
+void loop() {
+  
+    if(Serial.available() > 0){     
+      state = Serial.read();   
+    }
+   Serial.println(state); 
+  //Change speed if state is equal from 0 to 4. Values must  0 to 255 (PWM)
+    if (state == '0'){
+      vSpeed=0;}
+    else if (state == '1'){
+      vSpeed=100;}
+    else if (state == '2'){
+      vSpeed=180;}
+    else if (state == '3'){
+      vSpeed=200;}
+    else if (state == '4'){
+      vSpeed=255;}
+     
+  /***********************Adelante****************************/
+  //If state is equal with letter 'F', car will go forward!
+    if (state == 'F') {
+  digitalWrite (motorA1,LOW);
+  delay(1);
+  digitalWrite(motorA2,HIGH);                       
+  delay(1);
+  
+  digitalWrite (motorB1,LOW);
+  delay(1);
+  digitalWrite(motorB2,HIGH);
+
+  analogWrite (motorAspeed, vSpeed);
+  analogWrite (motorBspeed, vSpeed);
+  }
+
+  /***********************Atas****************************/
+  //If state is equal with letter 'B', car will go backward
+    else if (state == 'B') {
+  digitalWrite (motorA1,HIGH);
+  delay(1);
+  digitalWrite(motorA2,LOW);                       
+  delay(1);
+  
+  digitalWrite (motorB1,HIGH);
+  delay(1);
+  digitalWrite(motorB2,LOW);
+
+  analogWrite (motorAspeed, vSpeed);
+  analogWrite (motorBspeed, vSpeed);
+    }
+
+
+     /************************Stop*****************************/
+  //If state is equal with letter 'S', stop the car
+    else if (state == 'S'){
+        analogWrite(motorA1, 0);  analogWrite(motorA2, 0); 
+        analogWrite(motorB1, 0);  analogWrite(motorB2, 0);
+    }
+ 
+    
+}

@@ -1,0 +1,90 @@
+#include <Servo.h>
+Servo direccionservo;
+  int ang = 65; //Ángulo inicial  grados   
+  const int motorA1      = 3;  
+  const int motorA2      = 4; 
+  const int motorAspeed  = 5;
+  const int motorB1      = 7; 
+  const int motorB2      = 8; 
+  const int motorBspeed  = 6;
+  char caracter;
+  const int vSpeed=150; 
+  int atras = 10;
+  int ade = 9;
+
+
+void setup() {
+  pinMode(atras, OUTPUT);
+  pinMode(ade, OUTPUT);
+  Serial.begin(9600);
+// separacion
+  direccionservo.attach(2); //Servomotor: PIN2
+  Serial.begin(9600); //baudrate=9600
+// put your setup code here, to run once:
+    pinMode(motorA1, OUTPUT);
+    pinMode(motorA2, OUTPUT);
+    pinMode(motorB1, OUTPUT);
+    pinMode(motorB2, OUTPUT);
+   
+    // Initialize serial communication at 9600 bits per second:
+    Serial.begin(9600);
+}
+
+void loop() {
+ caracter = Serial.read(); // Se lee el caracter del celular
+  ang = constrain(ang,20,105); //Se limita los valores del angulo
+  direccionservo.write(ang);
+  
+switch (caracter) {
+  case 'L':
+      ang = ang + 60; //Se aumenta el angulo en 80 = 125° grados
+      Serial.print(ang); //Se envia el valor al celular
+        break;
+        case 'R':
+      ang = ang - 60; //Se disminuye en 80 = 45° grados
+      Serial.print(ang);
+        break;
+      case 'W':
+  digitalWrite(ade, HIGH);
+  break;
+  case 'w':
+  digitalWrite(ade, LOW);
+  break;
+  case 'U':
+  digitalWrite(atras, HIGH);
+  break;
+  case 'u':
+  digitalWrite(atras, LOW);
+  break;
+       case 'F':
+  digitalWrite (motorA1,LOW);
+  delay(1);
+  digitalWrite(motorA2,HIGH);                       
+  delay(1);
+  
+  digitalWrite (motorB1,LOW);
+  delay(1);
+  digitalWrite(motorB2,HIGH);
+
+  analogWrite (motorAspeed, vSpeed);
+  analogWrite (motorBspeed, vSpeed);
+  break;
+    case 'B':
+  digitalWrite (motorA1,HIGH);
+  delay(1);
+  digitalWrite(motorA2,LOW);                       
+  delay(1);
+  
+  digitalWrite (motorB1,HIGH);
+  delay(1);
+  digitalWrite(motorB2,LOW);
+
+  analogWrite (motorAspeed, vSpeed);
+  analogWrite (motorBspeed, vSpeed);
+  break;
+  case 'S':
+        analogWrite(motorA1, 0);  analogWrite(motorA2, 0); 
+        analogWrite(motorB1, 0);  analogWrite(motorB2, 0);
+    }
+}
+ 

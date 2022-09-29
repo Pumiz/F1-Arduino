@@ -1,0 +1,31 @@
+#include <Servo.h> 
+
+Servo direccionservo;
+char caractte//Caracter recibido por bluetooth
+int ang = 90; //Ángulo inicial  grados
+
+void setup(){
+
+  direccionservo.attach(2); //Servomotor: PIN2
+  Serial.begin(9600); //baudrate=9600
+  
+  }
+
+void loop(){
+  
+if(Serial.available()){ // "Si se detecta una entrada"
+    caracter = Serial.read(); // Se lee el caracter del celular
+    if (caracter == 'L'){ 
+      ang = ang + 10; //Se aumenta el angulo en 80 = 125° grados
+      Serial.print(ang); //Se envia el valor al celular
+      }
+    else if (caracter== 'R'){
+      ang = ang - 10; //Se disminuye en 80 = 45° grados
+      Serial.print(ang);
+      }
+else { ang = 60;
+}
+    ang = constrain(ang,30,110); //Se limita los valores del angulo
+    }
+    direccionservo.write(ang); //Se ingresa el valor de "ang" en el Servo
+  }

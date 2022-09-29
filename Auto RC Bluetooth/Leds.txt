@@ -1,0 +1,30 @@
+int luzade = 9;
+int luzatras = 10;
+int encendido;
+
+void setup() {
+Serial.begin(9600);
+pinMode(luzatras, OUTPUT);
+pinMode(luzade, OUTPUT);
+}
+
+void loop() {
+
+      if(Serial.available() > 0){     
+      encendido = Serial.read(); 
+      }
+     Serial.println(encendido);
+  if (encendido == 'W') {
+      digitalWrite(luzade, HIGH);
+    }
+    else if (encendido == 'w') {
+      digitalWrite(luzade, LOW);
+    }
+    else if (encendido == 'U') {
+      digitalWrite(luzatras, HIGH);
+    }
+   else if (encendido == 'u') {
+     digitalWrite(luzatras, LOW);
+   }
+  }
+  

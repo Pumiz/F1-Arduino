@@ -1,0 +1,95 @@
+#include <Servo.h> //Librería requerida con el Servo.
+Servo direccionservo;   //Se le declara un nombre para el Servo.
+  int ang = 65; //Ángulo inicial  grados   
+  const int motorA1      = 3;  
+  const int motorA2      = 4; 
+  const int ENB          = 5;
+  const int motorB1      = 7; 
+  const int motorB2      = 8; 
+  const int ENA          = 6;
+  char caracter; //variable donde se guardan los datos del Bluetooth.
+  const int velocidad=150; //Tope de RMP´S para los motores
+
+
+void setup() {
+  direccionservo.attach(2); //Servomotor: PIN2
+  Serial.begin(9600); //baudrate=9600
+    pinMode(motorA1, OUTPUT); // Se declara los motores como salida.
+    pinMode(motorA2, OUTPUT);
+    pinMode(motorB1, OUTPUT);
+    pinMode(motorB2, OUTPUT);
+    Serial.begin(9600);
+}
+
+void loop() {
+ caracter = Serial.read(); // Se lee el caracter del celular
+  ang = constrain(ang,20,130); //Se limita los valores del angulo para el Servo.
+  direccionservo.write(ang);
+  
+switch (caracter) {    //Se utiliza Swutich Case para determinar las acciones del auto, con respecto a los caracteres:
+  case 'L': // Con la "L" 
+      ang = 20; //Se mueve el servo a 20°
+      Serial.print(ang); //Se envia el valor al celular
+        break; // Para salir de accion se utiliza el "break"
+        case 'R': //Con las "R"
+      ang = 130; //Se mueve el Servo a 130°
+      Serial.print(ang);
+        break;
+       case 'F':
+  digitalWrite (motorA1,HIGH);   //Se habilita el pin de la variable "motorA1"
+  digitalWrite (motorA2,LOW);    //No se habilita el pin de la variable "motorA2"
+  digitalWrite (motorB1,HIGH);  //Se habilita el pin de la variable "motorB1"
+  digitalWrite (motorB2,LOW);    //No se habilita el pin de la variable "motorB2"
+  analogWrite (ENA, velocidad);  //Se habilitan los Eneable´s con respecto al valor de la varialble velocidad.
+  analogWrite (ENB, velocidad);
+  ang = 65;     //Se mueve el servo a 65° para que esté centradas las ruedas.
+  break;
+    case 'B':
+  digitalWrite (motorA1,LOW);      //No se habilita el pin de la variable "motorA1"
+  digitalWrite (motorA2,HIGH);    //Se habilita el pin de la variable "motorA2"
+  digitalWrite (motorB1,LOW);       //No se habilita el pin de la variable "motorB1"
+  digitalWrite (motorB2,HIGH);      //Se habilita el pin de la variable "motorB2"
+  analogWrite (ENA, velocidad);
+  analogWrite (ENB, velocidad);
+  ang = 65;
+   Serial.print(ang);
+  break;
+  case 'G':         //Acá pasa lo mismo que con la F, pero en simultaneo se mueve el Servo a 20°.
+  digitalWrite (motorA1,HIGH);
+  digitalWrite (motorA2,LOW);                       
+  digitalWrite (motorB1,HIGH);
+  digitalWrite (motorB2,LOW);
+  ang = 20;
+  Serial.print(ang);
+  break;
+  case 'I':   //Acá pasa lo mismo que con la F, pero en simultaneo se mueve el Servo a 130°.
+  digitalWrite (motorA1,HIGH);
+  digitalWrite (motorA2,LOW);                       
+  digitalWrite (motorB1,HIGH);
+  digitalWrite (motorB2,LOW);
+  ang = 130;
+  Serial.print(ang);
+  break;
+  case 'H':  //Acá pasa lo mismo que con la B, pero en simultaneo se mueve el Servo a 20°.
+  digitalWrite (motorA1,LOW);
+  digitalWrite (motorA2,HIGH);                       
+  digitalWrite (motorB1,LOW);
+  digitalWrite (motorB2,HIGH);
+  Serial.print(ang);
+  ang = 20;
+  break;
+  case 'J':   //Acá pasa lo mismo que con la B, pero en simultaneo se mueve el Servo a 130°.
+  digitalWrite (motorA1,LOW);
+  digitalWrite (motorA2,HIGH);                       
+  digitalWrite (motorB1,LOW);
+  digitalWrite (motorB2,HIGH);
+  ang = 130;
+  Serial.print(ang);
+  break;
+  case 'S': //Este case se usa para "apagar" o detener los motores y volver el servo a su posición central.
+      analogWrite(motorA1, 0);  analogWrite(motorA2, 0); 
+      analogWrite(motorB1, 0);  analogWrite(motorB2, 0);
+      ang = 65;
+      Serial.print(ang);
+    }
+}
